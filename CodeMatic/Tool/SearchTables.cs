@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using Maticsoft.CodeHelper;
 using System.Threading;
-using Word = Microsoft.Office.Interop.Word;
+//using Word = Microsoft.Office.Interop.Word;
 using System.Reflection;
 
 namespace Codematic
@@ -24,7 +24,7 @@ namespace Codematic
         MainForm mainfrm;
         Maticsoft.IDBO.IDbObject dbobj;
         Maticsoft.CmConfig.DbSettings dbset;
-        private Microsoft.Office.Interop.Word.Application WordApp = new Microsoft.Office.Interop.Word.ApplicationClass();
+        //private Microsoft.Office.Interop.Word.Application WordApp = new Microsoft.Office.Interop.Word.ApplicationClass();
         Thread mythread;
         string currentDbname = "";
         protected string longServername;
@@ -217,208 +217,210 @@ namespace Codematic
         {
             try
             {
-                //SetBtnDisable();
-                string strtitle = "数据库名：" + currentDbname;
-                int tblCount = listView1.Items.Count;
+                MessageBox.Show("该功能尚未改造完成。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                SetprogressBar1Max(tblCount);
-                SetprogressBar1Val(1);
-                SetlblStatuText("0");
+                ////SetBtnDisable();
+                //string strtitle = "数据库名：" + currentDbname;
+                //int tblCount = listView1.Items.Count;
 
-                #region 产生文档，写入标题
+                //SetprogressBar1Max(tblCount);
+                //SetprogressBar1Val(1);
+                //SetlblStatuText("0");
 
-                object oMissing = System.Reflection.Missing.Value;
-                object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
+                //#region 产生文档，写入标题
 
-                //创建文档
-                Word._Application oWord = new Word.Application();
-                Word._Document oDoc;
-                oWord.Visible = false;
-                oDoc = oWord.Documents.Add(ref oMissing, ref oMissing, ref oMissing, ref oMissing);
+                //object oMissing = System.Reflection.Missing.Value;
+                //object oEndOfDoc = "\\endofdoc"; /* \endofdoc is a predefined bookmark */
 
-                //设置页眉
-                oWord.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
-                oWord.ActiveWindow.View.SeekView = Microsoft.Office.Interop.Word.WdSeekView.wdSeekPrimaryHeader;
-                oWord.ActiveWindow.ActivePane.Selection.InsertAfter("动软自动生成器 www.maticsoft.com");
-                oWord.Selection.ParagraphFormat.Alignment = Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphRight;//设置右对齐
-                oWord.ActiveWindow.View.SeekView = Microsoft.Office.Interop.Word.WdSeekView.wdSeekMainDocument;//跳出页眉设置
+                ////创建文档
+                //Word._Application oWord = new Word.Application();
+                //Word._Document oDoc;
+                //oWord.Visible = false;
+                //oDoc = oWord.Documents.Add(ref oMissing, ref oMissing, ref oMissing, ref oMissing);
 
-                //库名
-                Word.Paragraph oPara1;
-                oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
-                oPara1.Range.Text = strtitle;
-                oPara1.Range.Font.Bold = 1;
-                oPara1.Range.Font.Name = "宋体";
-                oPara1.Range.Font.Size = 12;
-                oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                oPara1.Format.SpaceAfter = 5;    //24 pt spacing after paragraph.
-                oPara1.Range.InsertParagraphAfter();
+                ////设置页眉
+                //oWord.ActiveWindow.View.Type = Microsoft.Office.Interop.Word.WdViewType.wdOutlineView;
+                //oWord.ActiveWindow.View.SeekView = Microsoft.Office.Interop.Word.WdSeekView.wdSeekPrimaryHeader;
+                //oWord.ActiveWindow.ActivePane.Selection.InsertAfter("动软自动生成器 www.maticsoft.com");
+                //oWord.Selection.ParagraphFormat.Alignment = Microsoft.Office.Interop.Word.WdParagraphAlignment.wdAlignParagraphRight;//设置右对齐
+                //oWord.ActiveWindow.View.SeekView = Microsoft.Office.Interop.Word.WdSeekView.wdSeekMainDocument;//跳出页眉设置
 
-                #endregion
+                ////库名
+                //Word.Paragraph oPara1;
+                //oPara1 = oDoc.Content.Paragraphs.Add(ref oMissing);
+                //oPara1.Range.Text = strtitle;
+                //oPara1.Range.Font.Bold = 1;
+                //oPara1.Range.Font.Name = "宋体";
+                //oPara1.Range.Font.Size = 12;
+                //oPara1.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                //oPara1.Format.SpaceAfter = 5;    //24 pt spacing after paragraph.
+                //oPara1.Range.InsertParagraphAfter();
 
-
-                #region 表的扩展属性
-
-                DataTable dtEx = dbobj.GetTablesExProperty(currentDbname);
-
-                #endregion
+                //#endregion
 
 
-                #region 循环每个表
-                List<string> tablist = new List<string>();
-                int i = 0;
-                foreach (ListViewItem item in this.listView1.SelectedItems)
-                {
-                    string tablename = item.SubItems[1].Text;
-                    string tabletitle = "表名：" + tablename;
+                //#region 表的扩展属性
 
-                    if (tablist.Contains(tablename))
-                    {                        
-                        continue;
-                    }
-                    tablist.Add(tablename);
+                //DataTable dtEx = dbobj.GetTablesExProperty(currentDbname);
 
-                    #region 循环每一个列，产生一行数据
+                //#endregion
 
-                    List<ColumnInfo> collist = dbobj.GetColumnInfoList(currentDbname, tablename);
-                    int rc = collist.Count;
-                    if ((collist != null) && (collist.Count > 0))
-                    {
-                        //表名
-                        Word.Paragraph oPara2;
-                        object oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-                        oPara2 = oDoc.Content.Paragraphs.Add(ref oRng);
-                        oPara2.Range.Text = tabletitle;
-                        oPara2.Range.Font.Bold = 1;
-                        oPara2.Range.Font.Name = "宋体";
-                        oPara2.Range.Font.Size = 10;
-                        oPara2.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                        oPara2.Format.SpaceBefore = 15;
-                        oPara2.Format.SpaceAfter = 1;
-                        oPara2.Range.InsertParagraphAfter();
 
-                        //描述信息
-                        string tabdesc = "";
-                        if (dtEx != null)
-                        {
-                            try
-                            {
-                                DataRow[] drs = dtEx.Select("objname='" + tablename + "'");
-                                if (drs.Length > 0)
-                                {
-                                    if (drs[0]["value"] != null)
-                                    {
-                                        tabdesc = drs[0]["value"].ToString();
-                                    }
-                                }
-                            }
-                            catch
-                            { }
-                        }
+                //#region 循环每个表
+                //List<string> tablist = new List<string>();
+                //int i = 0;
+                //foreach (ListViewItem item in this.listView1.SelectedItems)
+                //{
+                //    string tablename = item.SubItems[1].Text;
+                //    string tabletitle = "表名：" + tablename;
 
-                        Word.Paragraph oPara3;
-                        oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-                        oPara3 = oDoc.Content.Paragraphs.Add(ref oRng);
-                        oPara3.Range.Text = tabdesc;
-                        oPara3.Range.Font.Bold = 0;
-                        oPara3.Range.Font.Name = "宋体";
-                        oPara3.Range.Font.Size = 9;
-                        oPara3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;//.wdAlignParagraphCenter;
-                        oPara3.Format.SpaceBefore = 1;
-                        oPara3.Format.SpaceAfter = 1;
-                        oPara3.Range.InsertParagraphAfter();
+                //    if (tablist.Contains(tablename))
+                //    {                        
+                //        continue;
+                //    }
+                //    tablist.Add(tablename);
 
-                        //插入表格          
-                        Word.Table oTable;
-                        Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
-                        oTable = oDoc.Tables.Add(wrdRng, rc + 1, 10, ref oMissing, ref oMissing);
-                        oTable.Range.Font.Name = "宋体";
-                        oTable.Range.Font.Size = 9;
-                        oTable.Borders.Enable = 1;
-                        oTable.Rows.Height = 10;
-                        oTable.AllowAutoFit = true;
-                        //wrdRng.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                        //oTable.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleThickThinLargeGap;
-                        //oTable.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
-                        //oTable.Range.ParagraphFormat.SpaceAfter = 2;//表格里面的内容段落后空格
+                //    #region 循环每一个列，产生一行数据
 
-                        //填充表格内容
-                        oTable.Cell(1, 1).Range.Text = "序号"; //在表格的第一行第一列填入内容。                
-                        oTable.Cell(1, 2).Range.Text = "列名";
-                        oTable.Cell(1, 3).Range.Text = "数据类型";
-                        oTable.Cell(1, 4).Range.Text = "长度";
-                        oTable.Cell(1, 5).Range.Text = "小数位";
-                        oTable.Cell(1, 6).Range.Text = "标识";
-                        oTable.Cell(1, 7).Range.Text = "主键";
-                        oTable.Cell(1, 8).Range.Text = "允许空";
-                        oTable.Cell(1, 9).Range.Text = "默认值";
-                        oTable.Cell(1, 10).Range.Text = "说明";
+                //    List<ColumnInfo> collist = dbobj.GetColumnInfoList(currentDbname, tablename);
+                //    int rc = collist.Count;
+                //    if ((collist != null) && (collist.Count > 0))
+                //    {
+                //        //表名
+                //        Word.Paragraph oPara2;
+                //        object oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+                //        oPara2 = oDoc.Content.Paragraphs.Add(ref oRng);
+                //        oPara2.Range.Text = tabletitle;
+                //        oPara2.Range.Font.Bold = 1;
+                //        oPara2.Range.Font.Name = "宋体";
+                //        oPara2.Range.Font.Size = 10;
+                //        oPara2.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                //        oPara2.Format.SpaceBefore = 15;
+                //        oPara2.Format.SpaceAfter = 1;
+                //        oPara2.Range.InsertParagraphAfter();
 
-                        oTable.Columns[1].Width = 33;
-                        //oTable.Columns[2].Width=80;
-                        oTable.Columns[3].Width = 60;
-                        oTable.Columns[4].Width = 33;
-                        oTable.Columns[5].Width = 43;
-                        oTable.Columns[6].Width = 33;
-                        oTable.Columns[7].Width = 33;
-                        oTable.Columns[8].Width = 43;
-                        //tbl.Columns[9].Width=80;
+                //        //描述信息
+                //        string tabdesc = "";
+                //        if (dtEx != null)
+                //        {
+                //            try
+                //            {
+                //                DataRow[] drs = dtEx.Select("objname='" + tablename + "'");
+                //                if (drs.Length > 0)
+                //                {
+                //                    if (drs[0]["value"] != null)
+                //                    {
+                //                        tabdesc = drs[0]["value"].ToString();
+                //                    }
+                //                }
+                //            }
+                //            catch
+                //            { }
+                //        }
 
-                        int r, c;
-                        string strText;
-                        for (r = 0; r < rc; r++)
-                        {
-                            ColumnInfo col = (ColumnInfo)collist[r];
-                            string order = col.ColumnOrder;
-                            string colum = col.ColumnName;
-                            string typename = col.TypeName;
-                            string length = col.Length;
-                            string scale = col.Scale;
-                            string IsIdentity = col.IsIdentity.ToString().ToLower() == "true" ? "是" : "";
-                            string PK = col.IsPrimaryKey.ToString().ToLower() == "true" ? "是" : "";
-                            string isnull = col.Nullable.ToString().ToLower() == "true" ? "是" : "否";
-                            string defaultstr = col.DefaultVal.ToString();
-                            string description = col.Description.ToString();
-                            if (length.Trim() == "-1")
-                            {
-                                length = "MAX";
-                            }
+                //        Word.Paragraph oPara3;
+                //        oRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+                //        oPara3 = oDoc.Content.Paragraphs.Add(ref oRng);
+                //        oPara3.Range.Text = tabdesc;
+                //        oPara3.Range.Font.Bold = 0;
+                //        oPara3.Range.Font.Name = "宋体";
+                //        oPara3.Range.Font.Size = 9;
+                //        oPara3.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphLeft;//.wdAlignParagraphCenter;
+                //        oPara3.Format.SpaceBefore = 1;
+                //        oPara3.Format.SpaceAfter = 1;
+                //        oPara3.Range.InsertParagraphAfter();
 
-                            oTable.Cell(r + 2, 1).Range.Text = order;
-                            oTable.Cell(r + 2, 2).Range.Text = colum;
-                            oTable.Cell(r + 2, 3).Range.Text = typename;
-                            oTable.Cell(r + 2, 4).Range.Text = length;
-                            oTable.Cell(r + 2, 5).Range.Text = scale;
-                            oTable.Cell(r + 2, 6).Range.Text = IsIdentity;
-                            oTable.Cell(r + 2, 7).Range.Text = PK;
-                            oTable.Cell(r + 2, 8).Range.Text = isnull;
-                            oTable.Cell(r + 2, 9).Range.Text = defaultstr;
-                            oTable.Cell(r + 2, 10).Range.Text = description;
-                        }
-                        oTable.Rows[1].Range.Font.Bold = 1;
-                        oTable.Rows[1].Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
-                        //oTable.Rows[1].Range.Font.Italic = 1;
-                        //oTable.Columns[1].Width = oWord.InchesToPoints(2); //Change width of columns 1 & 2
-                        //oTable.Columns[2].Width = oWord.InchesToPoints(3);
-                        oTable.Rows.First.Shading.Texture = Word.WdTextureIndex.wdTexture25Percent;//设置阴影
-                        //oTable.Rows.First.Range.Font.Bold = 1;
-                        //oTable.Rows.First.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                //        //插入表格          
+                //        Word.Table oTable;
+                //        Word.Range wrdRng = oDoc.Bookmarks.get_Item(ref oEndOfDoc).Range;
+                //        oTable = oDoc.Tables.Add(wrdRng, rc + 1, 10, ref oMissing, ref oMissing);
+                //        oTable.Range.Font.Name = "宋体";
+                //        oTable.Range.Font.Size = 9;
+                //        oTable.Borders.Enable = 1;
+                //        oTable.Rows.Height = 10;
+                //        oTable.AllowAutoFit = true;
+                //        //wrdRng.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                //        //oTable.Borders.OutsideLineStyle = Word.WdLineStyle.wdLineStyleThickThinLargeGap;
+                //        //oTable.Borders.InsideLineStyle = Word.WdLineStyle.wdLineStyleSingle;
+                //        //oTable.Range.ParagraphFormat.SpaceAfter = 2;//表格里面的内容段落后空格
 
-                    }
-                    #endregion
+                //        //填充表格内容
+                //        oTable.Cell(1, 1).Range.Text = "序号"; //在表格的第一行第一列填入内容。                
+                //        oTable.Cell(1, 2).Range.Text = "列名";
+                //        oTable.Cell(1, 3).Range.Text = "数据类型";
+                //        oTable.Cell(1, 4).Range.Text = "长度";
+                //        oTable.Cell(1, 5).Range.Text = "小数位";
+                //        oTable.Cell(1, 6).Range.Text = "标识";
+                //        oTable.Cell(1, 7).Range.Text = "主键";
+                //        oTable.Cell(1, 8).Range.Text = "允许空";
+                //        oTable.Cell(1, 9).Range.Text = "默认值";
+                //        oTable.Cell(1, 10).Range.Text = "说明";
 
-                    SetprogressBar1Val(i + 1);
-                    SetlblStatuText("已生成" + (i + 1).ToString());
+                //        oTable.Columns[1].Width = 33;
+                //        //oTable.Columns[2].Width=80;
+                //        oTable.Columns[3].Width = 60;
+                //        oTable.Columns[4].Width = 33;
+                //        oTable.Columns[5].Width = 43;
+                //        oTable.Columns[6].Width = 33;
+                //        oTable.Columns[7].Width = 33;
+                //        oTable.Columns[8].Width = 43;
+                //        //tbl.Columns[9].Width=80;
 
-                    i++;
-                }
-                #endregion
+                //        int r, c;
+                //        string strText;
+                //        for (r = 0; r < rc; r++)
+                //        {
+                //            ColumnInfo col = (ColumnInfo)collist[r];
+                //            string order = col.ColumnOrder;
+                //            string colum = col.ColumnName;
+                //            string typename = col.TypeName;
+                //            string length = col.Length;
+                //            string scale = col.Scale;
+                //            string IsIdentity = col.IsIdentity.ToString().ToLower() == "true" ? "是" : "";
+                //            string PK = col.IsPrimaryKey.ToString().ToLower() == "true" ? "是" : "";
+                //            string isnull = col.Nullable.ToString().ToLower() == "true" ? "是" : "否";
+                //            string defaultstr = col.DefaultVal.ToString();
+                //            string description = col.Description.ToString();
+                //            if (length.Trim() == "-1")
+                //            {
+                //                length = "MAX";
+                //            }
 
-                oWord.Visible = true;
-                oDoc.Activate();
+                //            oTable.Cell(r + 2, 1).Range.Text = order;
+                //            oTable.Cell(r + 2, 2).Range.Text = colum;
+                //            oTable.Cell(r + 2, 3).Range.Text = typename;
+                //            oTable.Cell(r + 2, 4).Range.Text = length;
+                //            oTable.Cell(r + 2, 5).Range.Text = scale;
+                //            oTable.Cell(r + 2, 6).Range.Text = IsIdentity;
+                //            oTable.Cell(r + 2, 7).Range.Text = PK;
+                //            oTable.Cell(r + 2, 8).Range.Text = isnull;
+                //            oTable.Cell(r + 2, 9).Range.Text = defaultstr;
+                //            oTable.Cell(r + 2, 10).Range.Text = description;
+                //        }
+                //        oTable.Rows[1].Range.Font.Bold = 1;
+                //        oTable.Rows[1].Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+                //        //oTable.Rows[1].Range.Font.Italic = 1;
+                //        //oTable.Columns[1].Width = oWord.InchesToPoints(2); //Change width of columns 1 & 2
+                //        //oTable.Columns[2].Width = oWord.InchesToPoints(3);
+                //        oTable.Rows.First.Shading.Texture = Word.WdTextureIndex.wdTexture25Percent;//设置阴影
+                //        //oTable.Rows.First.Range.Font.Bold = 1;
+                //        //oTable.Rows.First.Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
 
-                //SetBtnEnable();
-                MessageBox.Show("文档生成成功！", "完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //    }
+                //    #endregion
+
+                //    SetprogressBar1Val(i + 1);
+                //    SetlblStatuText("已生成" + (i + 1).ToString());
+
+                //    i++;
+                //}
+                //#endregion
+
+                //oWord.Visible = true;
+                //oDoc.Activate();
+
+                ////SetBtnEnable();
+                //MessageBox.Show("文档生成成功！", "完成", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             }
             catch (System.Exception ex)

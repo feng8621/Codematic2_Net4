@@ -308,8 +308,10 @@ namespace Codematic
             }
             try
             {
-                DbToWord dbtoword = new DbToWord(longservername);
-                dbtoword.Show();
+                //DbToWord dbtoword = new DbToWord(longservername);
+                //dbtoword.Show();
+
+                MessageBox.Show("该功能尚未改造完成。", "提示", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             catch
             {

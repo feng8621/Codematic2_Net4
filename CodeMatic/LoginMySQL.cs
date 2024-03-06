@@ -66,13 +66,13 @@ namespace Codematic
                 {
                     LogInfo.WriteLog(ex);
                     this.Text = "连接服务器或获取数据信息失败！";
-                    DialogResult drs = MessageBox.Show(this, "连接服务器或获取数据信息失败！\r\n请检查服务器地址或用户名密码是否正确！查看帮助文件以帮助您解决问题？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
+                    DialogResult drs = MessageBox.Show(this, "连接服务器或获取数据信息失败！\r\n请检查服务器地址或用户名密码是否正确！\r\n" + (ex.ToString()), "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Error);
                     if (drs == DialogResult.OK)
                     {
                         try
                         {
-                            Process proc = new Process();
-                            Process.Start("IExplore.exe", "http://help.maticsoft.com");
+                            //Process proc = new Process();
+                            //Process.Start("IExplore.exe", "http://help.maticsoft.com");
                         }
                         catch
                         {

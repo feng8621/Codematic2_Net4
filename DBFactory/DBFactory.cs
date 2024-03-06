@@ -91,6 +91,7 @@ namespace Maticsoft.DBFactory
                 catch(System.Exception ex)
                 {
                     string str=ex.Message;// º«¬º¥ÌŒÛ»’÷æ
+                    throw;
                 }
             }
             return obj;

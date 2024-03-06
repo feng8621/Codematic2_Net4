@@ -1201,3 +1201,34 @@ Source: System.Data
 2011/12/9 15:35:55:未将对象引用设置到对象的实例。
 2011/12/9 15:36:14:未将对象引用设置到对象的实例。
 2011/12/9 16:02:56:未将对象引用设置到对象的实例。
+2024/3/6 17:37:13:Check Version Server Error:请求因 HTTP 状态 404 失败: Not Found。
+2024/3/6 17:37:19:Check Version Server Error:请求因 HTTP 状态 404 失败: Not Found。
+2024/3/6 17:37:39:
+错误信息：未将对象引用设置到对象的实例。
+Stack Trace:   在 Codematic.LoginMySQL.btn_ConTest_Click(Object sender, EventArgs e) 位置 D:\Code\_ZQF_Test\Codematic2_Net4\Codematic2\CodeMatic\LoginMySQL.cs:行号 46
+Source: Codematic
+
+2024/3/6 17:41:05:Check Version Server Error:请求因 HTTP 状态 404 失败: Not Found。
+2024/3/6 17:41:16:Check Version Server Error:请求因 HTTP 状态 404 失败: Not Found。
+2024/3/6 17:44:13:
+错误信息：未将对象引用设置到对象的实例。
+Stack Trace:   在 Codematic.LoginMySQL.btn_ConTest_Click(Object sender, EventArgs e) 位置 D:\Code\_ZQF_Test\Codematic2_Net4\Codematic2\CodeMatic\LoginMySQL.cs:行号 46
+Source: Codematic
+
+2024/3/6 17:50:24:Check Version Server Error:请求因 HTTP 状态 404 失败: Not Found。
+2024/3/6 17:50:40:
+错误信息：Connection must be valid and open.
+Stack Trace:   在 MySql.Data.MySqlClient.Interceptors.ExceptionInterceptor.Throw(Exception exception)
+   在 MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   在 MySql.Data.MySqlClient.MySqlCommand.CheckState()
+   在 MySql.Data.MySqlClient.MySqlCommand.<ExecuteReaderAsync>d__111.MoveNext()
+--- 引发异常的上一位置中堆栈跟踪的末尾 ---
+   在 System.Runtime.ExceptionServices.ExceptionDispatchInfo.Throw()
+   在 System.Runtime.CompilerServices.TaskAwaiter.HandleNonSuccessAndDebuggerNotification(Task task)
+   在 MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   在 Maticsoft.DbObjects.MySQL.DbObject.ExecuteReader(String DbName, String strSQL) 位置 D:\Code\_ZQF_Test\Codematic2_Net4\Codematic2\DbObject\MySQL\DbObject.cs:行号 169
+   在 Maticsoft.DbObjects.MySQL.DbObject.GetDBList() 位置 D:\Code\_ZQF_Test\Codematic2_Net4\Codematic2\DbObject\MySQL\DbObject.cs:行号 287
+   在 Codematic.LoginMySQL.btn_ConTest_Click(Object sender, EventArgs e) 位置 D:\Code\_ZQF_Test\Codematic2_Net4\Codematic2\CodeMatic\LoginMySQL.cs:行号 47
+Source: MySql.Data
+
+2024/3/6 17:53:57:Check Version Server Error:请求因 HTTP 状态 404 失败: Not Found。
